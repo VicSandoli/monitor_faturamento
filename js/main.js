@@ -1,4 +1,5 @@
-// Código DataTables (inicialização e preenchimento das tabelas)
+import { atualizarTabelaProcessos } from './processos.js';
+import { atualizarTabelaFiliais } from './filiais.js';
 
 /**
  * Retrieves data from a REST service.
@@ -27,60 +28,11 @@ function obterDadosDoServico() {
 }
 
 /**
- * Updates the Process Table with new data.
+ * Updates the data in the DataTables by retrieving new data from the service.
+ * Sets a timeout to update the data again in 2 seconds.
  *
- * @param {Object} data - The data used to update the table.
- * @return {void} 
+ * @return {undefined} No return value.
  */
-function atualizarTabelaProcessos(data) {
-    // Atualize a DataTable de Processos com os novos dados
-    var tabelaProcessos = $('#tabelaProcessos').DataTable();
-
-    // Limpe os dados existentes na tabela
-    tabelaProcessos.clear().draw();
-
-    // Preencha a tabela com os novos dados
-    if (data.listaProcessos) {
-        data.listaProcessos.forEach(function (processo) {
-            tabelaProcessos.row.add([
-                processo.idProcesso,
-                processo.proprietario,
-                processo.ultimaNotaFaturada,
-                processo.detalheLock,
-                processo.estaEmLock ? 'Sim' : 'Não'
-            ]).draw(false);
-        });
-    }
-}
-
-/**
- * Updates the Filiais DataTable with new data.
- *
- * @param {Object} data - The data to update the table with.
- * @return {void} 
- */
-function atualizarTabelaFiliais(data) {
-    // Atualize a DataTable de Filiais com os novos dados
-    var tabelaFiliais = $('#tabelaFiliais').DataTable();
-
-    // Limpe os dados existentes na tabela
-    tabelaFiliais.clear().draw();
-
-    // Preencha a tabela com os novos dados
-    if (data.listaFiliais) {
-        data.listaFiliais.forEach(function (filial) {
-            tabelaFiliais.row.add([
-                filial.filialCodigo,
-                filial.filialNome,
-                filial.itensNaFilaFaturamento,
-                filial.detalheLock,
-                filial.possuiTarefa ? 'Sim' : 'Não',
-                filial.estaEmLock ? 'Sim' : 'Não'
-            ]).draw(false);
-        });
-    }
-}
-
 function atualizarDados() {
     obterDadosDoServico()
         .then(function (dados) {
